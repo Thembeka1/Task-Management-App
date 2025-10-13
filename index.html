@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h2>Register page</h2>
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="username" requiured><br><br>
+        <input type="password" id="password" placeholder="password" required><br><br>
+        <button type="submit">Register</button>
+        <p>Already registered? <a href="login.html">login</a></p>
+    </form>
+</body>
+ <script >
+    // Lets make sure register form does anything automatic
+    document.getElementById("registerForm"). addEventListener("submit", function(e){
+        e.preventDefault();
+        // get userame from typed text in the input box
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        // Protect usernames so new users dont use the same to register
+      // User object to get users object OR everything
+        let users = JSON.parse(localStorage.getItem("users"))|| []
+
+        // Check if username already exists
+        if (users.find(u=> u.useraname === username)){
+            alert:("Username already Exists!")
+        }
+        users.push({username, password});
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Registration Successfully, you can now login");
+        window.location.href="login.html"
+    }
+);
+  </script>
+</html>
