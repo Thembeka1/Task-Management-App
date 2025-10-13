@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Task Manager</title>
+  
+</head>
+<body>
+
+<div class="container">
+  <h1>My Task Manager</h1>
+
+  <section>
+    <h2>Add New Task</h2>
+    <form id="addTaskForm">
+      <label>Task Title:</label>
+      <input type="text" id="taskTitle" placeholder="What should be done today?" required><br><br>
+
+      <label>Due Date:</label>
+      <input type="date" id="dueDate" required><br><br>
+
+      <label>Description:</label>
+      <textarea id="description" rows="3" placeholder="Add your details"></textarea> <br>
+
+      <button type="submit" class="add-btn">Add Task</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Your Tasks</h2>
+    <div class="filter-buttons" id="filterBtns">
+      <button id="allTasks" class="active">Show All Tasks</button>
+      <button id="completedTasks">Completed Tasks</button>
+      <button id="pendingTasks">Pending Tasks</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Task List</h2>
+    <div id="tasksContainer"></div>
+    <p id="taskCounter"></p>
+  </section>
+</div>
+
+
+<script>
+class Task {
+  constructor(id, title, description, dueDate, completed = false) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.dueDate = dueDate;
+    this.completed = completed;
+  }
+
+  toggleComplete() {
+    this.completed = !this.completed;
+  }
+}
+
+class TaskManager {
+  constructor() {
+    // Load saved tasks or start with an empty array
+    this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  }
+
+  addTask(task) {
+    this.tasks.push(task);
+    this.saveTasks();
+  }
+
+  saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+
+  getTasks() {
+    return this.tasks;
+  }
+}
+
+const taskManager = new TaskManager();
+
+
+const addTaskForm = document.getElementById('addTaskForm');
+const tasksContainer = document.getElementById('tasksContainer');
+const taskCounter = document.getElementById('taskCounter');
+
+
+addTaskForm.addEventListener('submit', function(e) {
+  e.preventDefault(); // Stop page from reloading
+
+  // Get input values
+  const title = document.getElementById('taskTitle').value.trim();
+  const description = document.getElementById('description').value.trim();
+  const dueDate = document.getElementById('dueDate').value;
+
+  // Basic validation
+  if (title === "" || dueDate === "") {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  // Create a new task
+  const id = Date.now(); // unique id
+  const newTask = new Task(id, title, description, dueDate);
+
+  // Add task to the TaskManager
+  taskManager.addTask(newTask);
+
+  // Reset the form
+  addTaskForm.reset();
+
+  // Refresh the task list display
+  displayTasks();
+});
+
+
+function displayTasks() {
+  const tasks = taskManager.getTasks();
+  tasksContainer.innerHTML = ""; // clear old list
+
+  if (tasks.length === 0) {
+    tasksContainer.innerHTML = "<p>No tasks added yet.</p>";
+    taskCounter.textContent = "";
+    return;
+  }
+
+  tasks.forEach(task => {
+    const taskDiv = document.createElement("div");
+    taskDiv.classList.add("task-item");
+
+    taskDiv.innerHTML = `
+      <h3>${task.title}</h3>
+      <p>${task.description}</p>
+      <p><strong>Due:</strong> ${task.dueDate}</p>
+    `;
+
+    tasksContainer.appendChild(taskDiv);
+  });
+
+  taskCounter.textContent = `Total Tasks: ${tasks.length}`;
+}
+
+
+window.onload = displayTasks; 
+  
+</script>
+
+</body>
+</html>
