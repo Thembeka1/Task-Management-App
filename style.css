@@ -1,0 +1,8 @@
+loginForm{
+    max-width: 300px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 10px;
+}
