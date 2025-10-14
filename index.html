@@ -62,7 +62,6 @@
                 displayTasks();
             });
 
-            // Display tasks
             function displayTasks() {
                 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
                 container.innerHTML = "";
@@ -71,7 +70,6 @@
                     let div = document.createElement("div");
                     div.classList.add("task");
 
-                    // Removed strike-through line for completed tasks
                     div.innerHTML = `
                           <h3>${task.title}</h3>
                           <p><strong>Due:</strong> ${task.dueDate}</p>
