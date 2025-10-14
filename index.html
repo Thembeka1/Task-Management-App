@@ -1,11 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Task Management</title>
 </head>
+
 <body>
-    
+    <div class="container">
+        <h1>My Task Manager</h1>
+
+        <!-- Add new task -->
+        <section>
+            <h2>Add New Task</h2>
+            <form id="addTaskForm">
+                <label>Task Title:</label>
+                <input type="text" id="taskTitle" placeholder="What should be done?" required><br><br>
+
+                <label>Due Date:</label>
+                <input type="date" id="dueDate" required><br><br>
+
+                <label>Description:</label>
+                <textarea id="description" rows="3" placeholder="Add your details"></textarea><br>
+
+                <button type="submit" class="add-btn">Add Task</button>
+            </form>
+        </section>
+
+        <button onclick="logout()">LogOut</button>
+        <script>
+            //task
+            const form = document.getElementById("addTaskForm");
+            const container = document.getElementById("tasksContainer");
+            const counter = document.getElementById("taskCounter");
+
+            displayTasks(); // Show tasks on page load
+
+            // Add new task
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                let title = document.getElementById("taskTitle").value;
+                let date = document.getElementById("dueDate").value;
+                let desc = document.getElementById("description").value;
+
+                let task = {
+                    title: title,
+                    dueDate: date,
+                    description: desc,
+                    status: "pending" // status for filter
+                };
+
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                tasks.push(task);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+
+                form.reset();
+                alert("Task added successfully!");
+
+                displayTasks();
+            });
+
+            // Display tasks
+            function displayTasks() {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                container.innerHTML = "";
+
+                tasks.forEach((task, index) => {
+                    let div = document.createElement("div");
+                    div.classList.add("task");
+
+                    // Removed strike-through line for completed tasks
+                    div.innerHTML = `
+                          <h3>${task.title}</h3>
+                          <p><strong>Due:</strong> ${task.dueDate}</p>
+                          <p>${task.description}</p>
+                          <label>
+                              <input type="checkbox" ${task.status === "complete" ? "checked" : ""} onchange="toggleComplete(${index})">
+                              Mark Complete
+                          </label><br>
+                          <button class="delete-btn" onclick="deleteTask(${index})">Delete</button>
+                      `;
+                    container.appendChild(div);
+                });
+
+                counter.textContent = `Total Tasks: ${tasks.length}`;
+            }
+
+            // Toggle complete
+            function toggleComplete(index) {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                tasks[index].status = tasks[index].status === "complete" ? "pending" : "complete";
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                displayTasks();
+            }
+
+            // Delete task
+            function deleteTask(index) {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                tasks.splice(index, 1);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                displayTasks();
+            }
+
+            // Filter buttons
+            document.getElementById("allTasks").addEventListener("click", () => filterTasks("all"));
+            document.getElementById("completedTasks").addEventListener("click", () => filterTasks("complete"));
+            document.getElementById("pendingTasks").addEventListener("click", () => filterTasks("pending"));
+
+            // Filter function
+            function filterTasks(status) {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                let filtered = status === "all" ? tasks : tasks.filter(task => task.status === status);
+
+                container.innerHTML = "";
+                filtered.forEach((task, index) => {
+                    let div = document.createElement("div");
+                    div.classList.add("task");
+
+                    div.innerHTML = `
+                          <h3>${task.title}</h3>
+                          <p><strong>Due:</strong> ${task.dueDate}</p>
+                          <p>${task.description}</p>
+                          <label>
+                              <input type="checkbox" ${task.status === "complete" ? "checked" : ""} onchange="toggleComplete(${index})">
+                              Mark Complete
+                          </label><br>
+                          <button class="delete-btn" onclick="deleteTask(${index})">Delete</button>
+                      `;
+                    container.appendChild(div);
+                });
+
+                //  active button
+                document.querySelectorAll("#filterBtns button").forEach(btn => btn.classList.remove("active"));
+                if (status === "all") document.getElementById("allTasks").classList.add("active");
+                if (status === "complete") document.getElementById("completedTasks").classList.add("active");
+                if (status === "pending") document.getElementById("pendingTasks").classList.add("active");
+
+                counter.textContent = `Showing ${filtered.length} ${status === "all" ? "total" : status} tasks`;
+            }
+
+
+            //logout 
+            function logout() {
+                localStorage.setItem('user', JSON.stringify)({ username, password })
+                alert('user register!');
+            }
+        </script>
+
 </body>
+
 </html>
