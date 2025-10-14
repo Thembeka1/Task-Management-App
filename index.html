@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Management</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -17,8 +18,6 @@
 
     <div class="container">
         <h1>My Task Manager</h1>
-
-        <!-- Add new task -->
         <section>
             <h2>Add New Task</h2>
             <form id="addTaskForm">
@@ -30,10 +29,26 @@
 
                 <label>Description:</label>
                 <textarea id="description" rows="3" placeholder="Add your details"></textarea><br>
+                <br>
 
                 <button type="submit" class="add-btn">Add Task</button>
             </form>
         </section>
+        <section>
+            <h2>Task List</h2>
+            <div id="tasksContainer"></div>
+            <p id="taskCounter"></p>
+        </section>
+        <section>
+            <h2>Filter Tasks</h2>
+            <div class="filter-buttons" id="filterBtns">
+                <button id="allTasks" class="active">Show All Tasks</button>
+                <button id="completedTasks">Completed Tasks</button>
+                <button id="pendingTasks">Pending Tasks</button>
+            </div>
+        </section>
+
+    </div>
         <br><br>
         <button onclick="logout()">LogOut</button>
         <script>
