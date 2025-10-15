@@ -163,10 +163,19 @@
 
 
             //logout 
-            function logout() {
-    localStorage.removeItem('user'); 
-    alert('You have been logged out!');
-}
+// Logout script
+document.addEventListener('DOMContentLoaded', function () {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function () {
+            localStorage.clear();
+            alert('You have been logged out.');
+            window.location.href = '/Login.html';
+        });
+    }
+});
+
+
         </script>
 
     <footer class="footer">
