@@ -50,7 +50,7 @@
 
     </div>
         <br><br>
-        <button onclick="logout()">LogOut</button>
+      <button id="logout-btn">Logout</button>
         <script>
             //task
             const form = document.getElementById("addTaskForm");
@@ -164,16 +164,19 @@
 
             //logout 
 // Logout script
-document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     const logoutBtn = document.getElementById('logout-btn');
+
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-            localStorage.clear();
-            alert('You have been logged out.');
-            window.location.href = '/Login.html';
-        });
+      logoutBtn.addEventListener('click', function () {
+        localStorage.clear();
+        alert('You have been logged out.');
+        window.location.href = '/Login.html';
+      });
+    } else {
+      console.error('Logout button not found.');
     }
-});
+  });
 
 
         </script>
